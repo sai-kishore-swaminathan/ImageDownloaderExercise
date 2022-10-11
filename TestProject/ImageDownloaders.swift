@@ -106,10 +106,9 @@ final class ImageDownloaders {
                     DispatchQueue.main.async { [weak self] in
                         self?.pendingOperations.downloadsInProgress.removeValue(forKey: urlCell.uid)
                         self?.output?.reloadDataAsynchronously()
-                        self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: urlCell)
+                        self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: downloadingOperation.urlCell)
 
                         // Processing
-                        self?.urlCellCache.updateState(uid: urlCell.uid, state: .processing)
                         self?.startProcessingImagesFromOperaton(urlCell: self?.urlCellCache.getElement(uid: urlCell.uid))
 
                     }
