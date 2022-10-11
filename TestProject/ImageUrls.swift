@@ -30,7 +30,7 @@ final class ImageUrls {
     internal static func getUrlCells() -> [URLCell] {
             var urlCells = [URLCell]()
             for i in 0...9 {
-                var urlCell = URLCell(url: URL(string: "https://dummyimage.com/200/300")!, state: .notDownloading, uid: i)
+                var urlCell = URLCell(url: URL(string: "https://dummyimage.com/200x300&text=\(i)")!, state: .notDownloading, uid: i)
 
                 if i == 8 {
                     urlCell.url = URL(string: "https://algklknkasg/asgaskas/asg")!
@@ -56,7 +56,6 @@ final class ImageUrls {
         return urlCells
     }
 }
-
 
 
 // MARK: -
