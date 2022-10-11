@@ -20,6 +20,7 @@
 		B35C0DE128F5AAC00030C723 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35C0DE028F5AAC00030C723 /* Cache.swift */; };
 		B35C0DE328F5AF3D0030C723 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35C0DE228F5AF3D0030C723 /* Errors.swift */; };
 		B35C0DE528F5AF860030C723 /* DummyTimeConsumingLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35C0DE428F5AF860030C723 /* DummyTimeConsumingLogic.swift */; };
+		B35C0DE728F5BEF80030C723 /* CacheWithLocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35C0DE628F5BEF80030C723 /* CacheWithLocks.swift */; };
 		B3615BA928A504BC004003C9 /* ImageDownloaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3615BA828A504BC004003C9 /* ImageDownloaders.swift */; };
 		B369A43B28D0E8C20013CB98 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B369A43A28D0E8C20013CB98 /* Extensions.swift */; };
 		B369A44028D0F0C40013CB98 /* Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B369A43F28D0F0C40013CB98 /* Operations.swift */; };
@@ -53,6 +54,7 @@
 		B35C0DE028F5AAC00030C723 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		B35C0DE228F5AF3D0030C723 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		B35C0DE428F5AF860030C723 /* DummyTimeConsumingLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyTimeConsumingLogic.swift; sourceTree = "<group>"; };
+		B35C0DE628F5BEF80030C723 /* CacheWithLocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheWithLocks.swift; sourceTree = "<group>"; };
 		B3615BA828A504BC004003C9 /* ImageDownloaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloaders.swift; sourceTree = "<group>"; };
 		B369A43A28D0E8C20013CB98 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B369A43F28D0F0C40013CB98 /* Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operations.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				B369A43D28D0E98A0013CB98 /* StoryBoards+Assets */,
 				B369A43C28D0E9720013CB98 /* AppDelegates */,
 				B35C0DE028F5AAC00030C723 /* Cache.swift */,
+				B35C0DE628F5BEF80030C723 /* CacheWithLocks.swift */,
 				B35C0DE228F5AF3D0030C723 /* Errors.swift */,
 				B327254D280AD43E00B586C1 /* ImageUrls.swift */,
 				B369A43A28D0E8C20013CB98 /* Extensions.swift */,
@@ -251,6 +254,7 @@
 				B35C0DE328F5AF3D0030C723 /* Errors.swift in Sources */,
 				B369A44028D0F0C40013CB98 /* Operations.swift in Sources */,
 				B3A60212280C7E9D003926D5 /* ImageDownloaderOperationSubClass.swift in Sources */,
+				B35C0DE728F5BEF80030C723 /* CacheWithLocks.swift in Sources */,
 				B3A60216280C959C003926D5 /* PendingOperations.swift in Sources */,
 				B369A44228D0F1DA0013CB98 /* ImageDownloaderNewApi.swift in Sources */,
 				B3A6021B280C9F09003926D5 /* MyTableViewCell03.swift in Sources */,

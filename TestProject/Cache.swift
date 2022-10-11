@@ -11,38 +11,53 @@ import UIKit
 class URLCellCache {
 
     private var urlCellCache =  [Int:URLCell]()
-    let addingElementMutex = NSRecursiveLock()
-    let addingStateMutex = NSRecursiveLock()
-    let updatingImageMutex = NSRecursiveLock()
+    private let dispatchQueueCell = DispatchQueue(label: "com.cache.urlCell", attributes: .concurrent)
+
 
     func getElement(uid: Int) -> URLCell? {
-        return urlCellCache[uid]
+        var urlCell: URLCell?
+        dispatchQueueCell.sync {
+            urlCell = urlCellCache[uid]
+        }
+        return urlCell
     }
 
     func addElement(uid: Int, urlCell: URLCell) {
-        urlCellCache[uid] = urlCell
+        dispatchQueueCell.async(flags: .barrier) {
+            self.urlCellCache[uid] = urlCell
+        }
     }
 
     func updateState(uid: Int, state: UrlState) {
-        urlCellCache[uid]?.state = state
+        dispatchQueueCell.async(flags: .barrier) {
+            self.urlCellCache[uid]?.state = state
+        }
     }
 
     func getState(uid:Int) ->  UrlState {
-        guard let urlCell = urlCellCache[uid] else {
+        guard let urlCell = getElement(uid: uid) else {
             return .failed
         }
         return urlCell.state
     }
 
     func updateImage(uid: Int, image: UIImage?) {
-        urlCellCache[uid]?.image = image
+        dispatchQueueCell.async(flags: .barrier) { [weak self] in
+            self?.urlCellCache[uid]?.image = image
+        }
     }
 
     func getCount() -> Int {
-        return urlCellCache.count
+        var count = 0
+        dispatchQueueCell.sync {
+            count = urlCellCache.count
+        }
+        return count
     }
 
     func clearCache() {
-        urlCellCache.removeAll()
+        dispatchQueueCell.sync {
+            self.urlCellCache.removeAll()
+        }
     }
 }

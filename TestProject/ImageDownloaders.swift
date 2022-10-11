@@ -12,12 +12,10 @@ public protocol ImageDownloaderOutput {
     func reloadDataAsynchronously()
 }
 
-
-
 final class ImageDownloaders {
 
     public init() {}
-
+    
     var output: ImageDownloaderOutput? = nil
     let pendingOperations = PendingOperations()
     var operationsObserver: NSKeyValueObservation?
@@ -39,7 +37,6 @@ final class ImageDownloaders {
                     dispatchGroup.leave()
                 }
                 else {
-                    print("It came here")
                     // Download Section
                     self?.downloadQueue.async {
                         self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: urlCell)
@@ -219,8 +216,7 @@ final class ImageDownloaders {
         return urlCellCache.getCount()
     }
 
-    func getCell(uid: Int) -> URLCell {
-        // force unwrapping for simplicity
-        return urlCellCache.getElement(uid: uid)!
+    func getCell(uid: Int) -> URLCell? {
+        return urlCellCache.getElement(uid: uid)
     }
 }

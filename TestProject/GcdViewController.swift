@@ -44,8 +44,8 @@ final class GcdViewController: UIViewController, UITableViewDataSource, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath) as! MyTableViewCell
         let urlCells = imageDownloader.getCell(uid: indexPath.row)
-        cell.setTitle(urlState: urlCells.state)
-        cell.thumbnailImageView.image = urlCells.image
+        cell.setTitle(urlState: urlCells?.state)
+        cell.thumbnailImageView.image = urlCells?.image
         return cell
     }
 
@@ -57,7 +57,6 @@ final class GcdViewController: UIViewController, UITableViewDataSource, UITableV
     // MARK: - ImageDownloaderOutput
     func reloadDataAsynchronously() {
         DispatchQueue.main.async {
-//            print("Updating UI \(Thread.current)")
             self.myTableView.reloadData()
         }
     }

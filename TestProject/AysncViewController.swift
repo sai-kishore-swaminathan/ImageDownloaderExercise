@@ -37,8 +37,8 @@ class AysncViewController: UIViewController, UITableViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell03", for: indexPath) as! MyTableViewCell
         let urlCell = imageDownloader.getCell(uid: indexPath.row)
-        cell.setTitle(urlState: urlCell.state)
-        cell.thumbnailImageView.image =  urlCell.image
+        cell.setTitle(urlState: urlCell?.state)
+        cell.thumbnailImageView.image =  urlCell?.image
         return cell
     }
 
