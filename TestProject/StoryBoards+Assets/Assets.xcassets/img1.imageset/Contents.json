@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "5429b59c8e78fbc4_MCDTITA_FE014_H_1_-1.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
