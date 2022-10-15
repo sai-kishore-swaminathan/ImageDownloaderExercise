@@ -41,20 +41,6 @@ final class ImageUrls {
             }
             return urlCells
     }
-
-    internal static func getUrlCellsOld() -> [URLCellOld] {
-        var urlCells = [URLCellOld]()
-        for i in 0...9 {
-            let urlCell = URLCellOld()
-            urlCell.url = URL(string: "https://dummyimage.com/200/300")!
-            if i == 8 {
-                urlCell.url = URL(string: "https://algklknkasg/asgaskas/asg")
-            }
-            urlCell.uid = i
-            urlCells.append(urlCell)
-        }
-        return urlCells
-    }
 }
 
 
