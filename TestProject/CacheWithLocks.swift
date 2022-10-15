@@ -11,20 +11,14 @@ import UIKit
 class URLCellCacheWithLocks {
 
     private var urlCellCache =  [Int:URLCell]()
-    let addingElementMutex = NSRecursiveLock()
-    let addingStateMutex = NSRecursiveLock()
-    let updatingImageMutex = NSRecursiveLock()
+    let cacheLock = NSRecursiveLock()
 
     func getElement(uid: Int) -> URLCell? {
-        return urlCellCache[uid]
-    }
-
-    func addElement(uid: Int, urlCell: URLCell) {
-        urlCellCache[uid] = urlCell
-    }
-
-    func updateState(uid: Int, state: UrlState) {
-        urlCellCache[uid]?.state = state
+        var cell: URLCell? = nil
+        cacheLock.lock()
+        cell = self.urlCellCache[uid]
+        cacheLock.unlock()
+        return cell
     }
 
     func getState(uid:Int) ->  UrlState {
@@ -34,15 +28,36 @@ class URLCellCacheWithLocks {
         return urlCell.state
     }
 
-    func updateImage(uid: Int, image: UIImage?) {
-        urlCellCache[uid]?.image = image
+    func getCount() -> Int {
+        var count: Int = 0
+        cacheLock.lock()
+        count = self.urlCellCache.count
+        cacheLock.unlock()
+        return count
     }
 
-    func getCount() -> Int {
-        return urlCellCache.count
+    // MARK: - Locks without Separate Dispatch Queue:
+    func addElement(uid: Int, urlCell: URLCell) {
+        self.cacheLock.lock()
+        self.urlCellCache[uid] = urlCell
+        self.cacheLock.unlock()
+    }
+
+    func updateState(uid: Int, state: UrlState) {
+        self.cacheLock.lock()
+        self.urlCellCache[uid]?.state = state
+        self.cacheLock.unlock()
+    }
+
+    func updateImage(uid: Int, image: UIImage?) {
+        self.cacheLock.lock()
+        self.urlCellCache[uid]?.image = image
+        self.cacheLock.unlock()
     }
 
     func clearCache() {
-        urlCellCache.removeAll()
+        self.cacheLock.lock()
+        self.urlCellCache.removeAll()
+        self.cacheLock.unlock()
     }
 }
