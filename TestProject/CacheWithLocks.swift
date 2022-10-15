@@ -60,4 +60,46 @@ class URLCellCacheWithLocks {
         self.urlCellCache.removeAll()
         self.cacheLock.unlock()
     }
+
+    // MARK: - Locks with Separate Dispatch Queue:
+
+//    private let dispatchQueueCell = DispatchQueue(label: "com.cache.urlCell", attributes: .concurrent)
+
+//    func addElement(uid: Int, urlCell: URLCell) {
+//        dispatchQueueCell.async {
+//            self.cacheLock.lock()
+//            self.urlCellCache[uid] = urlCell
+//            self.cacheLock.unlock()
+//        }
+//    }
+//
+//    func updateState(uid: Int, state: UrlState) {
+//        dispatchQueueCell.async {
+//            self.cacheLock.lock()
+//            self.urlCellCache[uid]?.state = state
+//            self.cacheLock.unlock()
+//        }
+//    }
+
+
+
+//    func updateImage(uid: Int, image: UIImage?) {
+//        dispatchQueueCell.async {
+//            self.cacheLock.lock()
+//            self.urlCellCache[uid]?.image = image
+//            self.cacheLock.unlock()
+//        }
+//    }
+
+
+
+//    func clearCache() {
+//        dispatchQueueCell.async {
+//            self.cacheLock.lock()
+//            self.urlCellCache.removeAll()
+//            self.cacheLock.unlock()
+//        }
+//    }
+
 }
+
