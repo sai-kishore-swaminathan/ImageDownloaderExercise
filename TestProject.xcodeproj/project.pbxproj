@@ -13,6 +13,7 @@
 		B304421727F2126A00DE4EFE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B304421527F2126A00DE4EFE /* Main.storyboard */; };
 		B304421927F2126C00DE4EFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B304421827F2126C00DE4EFE /* Assets.xcassets */; };
 		B304421C27F2126C00DE4EFE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B304421A27F2126C00DE4EFE /* LaunchScreen.storyboard */; };
+		B326C06528FAA772003CB1B9 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B326C06428FAA772003CB1B9 /* Notes.swift */; };
 		B3272541280AD18A00B586C1 /* GcdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3272540280AD18A00B586C1 /* GcdViewController.swift */; };
 		B327254F280AD43E00B586C1 /* MyTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B327254C280AD43E00B586C1 /* MyTableViewCells.swift */; };
 		B3272550280AD43E00B586C1 /* ImageUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = B327254D280AD43E00B586C1 /* ImageUrls.swift */; };
@@ -40,6 +41,7 @@
 		B304421827F2126C00DE4EFE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B304421B27F2126C00DE4EFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B304421D27F2126C00DE4EFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B326C06428FAA772003CB1B9 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		B3272540280AD18A00B586C1 /* GcdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GcdViewController.swift; sourceTree = "<group>"; };
 		B327254C280AD43E00B586C1 /* MyTableViewCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTableViewCells.swift; sourceTree = "<group>"; };
 		B327254D280AD43E00B586C1 /* ImageUrls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUrls.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				B3A60218280C9E09003926D5 /* AysncViewController.swift */,
 				B36E5D66280A8F09002B54D9 /* Operations */,
 				B35C0DE428F5AF860030C723 /* DummyTimeConsumingLogic.swift */,
+				B326C06428FAA772003CB1B9 /* Notes.swift */,
 			);
 			path = TestProject;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 				B37D10C427FB314F00C61605 /* PitFallViewController.swift in Sources */,
 				B304421027F2126A00DE4EFE /* AppDelegate.swift in Sources */,
 				B3615BA928A504BC004003C9 /* ImageDownloaders.swift in Sources */,
+				B326C06528FAA772003CB1B9 /* Notes.swift in Sources */,
 				B3272541280AD18A00B586C1 /* GcdViewController.swift in Sources */,
 				B3A6020A280C7854003926D5 /* OperationsViewController.swift in Sources */,
 				B3A60214280C89B1003926D5 /* ImageProcessor.swift in Sources */,

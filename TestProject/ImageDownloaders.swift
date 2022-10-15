@@ -19,6 +19,7 @@ final class ImageDownloaders {
     var output: ImageDownloaderOutput? = nil
     let pendingOperations = PendingOperations()
     var operationsObserver: NSKeyValueObservation?
+    // Replace the below cache with URLCellCache() for different implementation
     let urlCellCache = URLCellCacheWithLocks()
     let dummyImageProcessing = DummyTimeConsumingLogic()
     let downloadQueue = DispatchQueue(label: "com.testing.downloadqueue", attributes: .concurrent)

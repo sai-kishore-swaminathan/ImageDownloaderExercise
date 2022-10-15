@@ -38,5 +38,4 @@ class MyTableViewCell: UITableViewCell {
         titleLabel.textColor = color
         titleLabel.text = urlState?.rawValue ?? ""
     }
-
 }
