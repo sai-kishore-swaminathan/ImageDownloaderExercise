@@ -157,31 +157,42 @@ final class ImageDownloaders {
     func downloadUsingAsyncAwait(urlCells:[URLCell], completion:@escaping(()->Void)) {
         urlCellCache.clearCache()
         Task {
-            for cell in urlCells {
-                urlCellCache.addElement(uid: cell.uid, urlCell: cell)
-                urlCellCache.updateState(uid: cell.uid, state: .downloading)
-                self.output?.reloadDataAsynchronously()
-                let image = try? await downloadImageAsyncAwait(from: cell.url)
-                if let image = image {
-                    urlCellCache.updateImage(uid: cell.uid, image: image)
-                    urlCellCache.updateState(uid: cell.uid, state: .downloaded)
-                    self.output?.reloadDataAsynchronously()
-
-                    // Processing
-                    let processedImage = try? await processImage(for: image)
-                    if let processedImage = processedImage {
-                        urlCellCache.updateImage(uid: cell.uid, image: processedImage)
-                        urlCellCache.updateState(uid: cell.uid, state: .finished)
+            await withTaskGroup(of: URLCell?.self, body: { [self] group in
+                for cell in urlCells {
+                    group.addTask {
+                        await self.fetchDownloadAndProcess(cell: cell)
                     }
-                    self.output?.reloadDataAsynchronously()
-                } else {
-                    urlCellCache.updateState(uid: cell.uid, state: .failed)
                 }
-                self.output?.reloadDataAsynchronously()
-            }
+            })
             completion()
         }
     }
+
+    private func fetchDownloadAndProcess(cell: URLCell) async -> URLCell? {
+        print("Cell \(cell.uid)")
+        urlCellCache.addElement(uid: cell.uid, urlCell: cell)
+        urlCellCache.updateState(uid: cell.uid, state: .downloading)
+        self.output?.reloadDataAsynchronously()
+        let image = try? await downloadImageAsyncAwait(from: cell.url)
+        if let image = image {
+            urlCellCache.updateImage(uid: cell.uid, image: image)
+            urlCellCache.updateState(uid: cell.uid, state: .downloaded)
+            self.output?.reloadDataAsynchronously()
+            
+            // Processing
+            let processedImage = try? await processImage(for: image)
+            if let processedImage = processedImage {
+                urlCellCache.updateImage(uid: cell.uid, image: processedImage)
+                urlCellCache.updateState(uid: cell.uid, state: .finished)
+            }
+            self.output?.reloadDataAsynchronously()
+        } else {
+            urlCellCache.updateState(uid: cell.uid, state: .failed)
+        }
+        self.output?.reloadDataAsynchronously()
+        return urlCellCache.getElement(uid: cell.uid)
+    }
+
 
     private func downloadImageAsyncAwait(from url: URL) async throws -> UIImage? {
         let imageTask = Task {

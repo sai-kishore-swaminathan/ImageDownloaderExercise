@@ -23,9 +23,11 @@ class AysncViewController: UIViewController, UITableViewDelegate,
     
     @IBAction func startButtonPressed(_ sender: Any) {
         imageDownloader.downloadUsingAsyncAwait(urlCells: ImageUrls.getUrlCells()) {
-            self.startButton.setTitle("Download Again", for: .normal)
-            let image = UIImage(systemName: "checkmark.seal.fill")
-            self.startButton.setImage(image, for: .normal)
+            DispatchQueue.main.async {
+                self.startButton.setTitle("Download Again", for: .normal)
+                let image = UIImage(systemName: "checkmark.seal.fill")
+                self.startButton.setImage(image, for: .normal)
+            }
         }
     }
 
@@ -49,9 +51,10 @@ class AysncViewController: UIViewController, UITableViewDelegate,
     // MARK: - ImageDownloaderOutput
 
     func reloadDataAsynchronously() {
-        self.myTableView.reloadData()
+        DispatchQueue.main.async{
+            self.myTableView.reloadData()
+        }
     }
-
 }
 
 

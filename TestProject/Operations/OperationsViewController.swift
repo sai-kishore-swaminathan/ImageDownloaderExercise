@@ -57,6 +57,8 @@ class OperationsViewController: UIViewController, UITableViewDataSource,
     // MARK: - ImageDownloaderOutput
     
     func reloadDataAsynchronously() {
-        myTableView.reloadData()
+        DispatchQueue.main.async {
+            self.myTableView.reloadData()
+        }
     }
 }
