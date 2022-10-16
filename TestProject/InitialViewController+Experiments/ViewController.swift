@@ -28,7 +28,8 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        operationDependency()
+//        operationDependency()
+        somthing()
     }
 
     //MARK: - Action Logic
@@ -241,6 +242,16 @@ final class ViewController: UIViewController {
         queue.maxConcurrentOperationCount = 2
         queue.waitUntilAllOperationsAreFinished()
         queue.cancelAllOperations()
+    }
+
+    func somthing() {
+        /// Instead of closures
+        let workItem = DispatchWorkItem {
+            print("Hello World")
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: workItem)
+        workItem.cancel()
+        print("Done")
     }
 
 
