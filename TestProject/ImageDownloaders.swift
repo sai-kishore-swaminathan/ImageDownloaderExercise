@@ -14,7 +14,10 @@ public protocol ImageDownloaderOutput {
 
 final class ImageDownloaders {
 
-    public init() {}
+    let pendingOperations: PendingOperations?
+    public init(pendingOperations: PendingOperations? = nil) {
+        self.pendingOperations = pendingOperations
+    }
     
     var output: ImageDownloaderOutput? = nil
     var operationsObserver: NSKeyValueObservation?
@@ -77,8 +80,11 @@ final class ImageDownloaders {
     func downloadUsingOperations(urlCells:[URLCell], completion: @escaping(()->Void)) {
         urlCellCache.clearCache()
 
-        /// Every Download Will create its own download and process operation queue
-        let pendingOperations = PendingOperations()
+        guard let pendingOperations = pendingOperations else {
+            /// Should pass Result with Error here but for simplicity keeping it like this 
+            completion()
+            return
+        }
 
         /// Method 1: -  OperationCount is deprecated in iOS 13
         operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,

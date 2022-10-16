@@ -13,7 +13,19 @@ class OperationsViewController: UIViewController, UITableViewDataSource,
     @IBOutlet weak var myTableView: UITableView!
     @IBOutlet weak var startDownloadButton: UIButton!
 
-    let imageDownloader = ImageDownloaders()
+    let pendingOperations = PendingOperations()
+    let imageDownloader: ImageDownloaders!
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        imageDownloader = ImageDownloaders(pendingOperations: pendingOperations)
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init?(coder: NSCoder) {
+        imageDownloader = ImageDownloaders(pendingOperations: pendingOperations)
+        super.init(coder: coder)
+    }
+
 
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -35,6 +47,11 @@ class OperationsViewController: UIViewController, UITableViewDataSource,
                 }
             })
         }
+    }
+
+    @IBAction func cancelAll(_ sender: Any) {
+        pendingOperations.downloadQueue.cancelAllOperations()
+        pendingOperations.processingQueue.cancelAllOperations()
     }
 
     //MARK: - TableView
