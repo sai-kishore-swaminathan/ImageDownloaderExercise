@@ -77,10 +77,10 @@ final class ImageDownloaders {
     func downloadUsingOperations(urlCells:[URLCell], completion: @escaping(()->Void)) {
         urlCellCache.clearCache()
 
-        /// Now Every Download Will create its own download and process operation queue
+        /// Every Download Will create its own download and process operation queue
         let pendingOperations = PendingOperations()
 
-        /// Method 1: - But still OperationCount is deprecated in iOS 13
+        /// Method 1: -  OperationCount is deprecated in iOS 13
 //        operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,
 //                                                                        options: [.new]) { [unowned self] (queue, change) in
 //            if change.newValue! == 0 {
@@ -89,7 +89,7 @@ final class ImageDownloaders {
 //            }
 //        }
 
-        /// Method 2: Completion using Dependency
+        /// Method 2: Completion using Operation Dependency
         var counter = 0
         let completionOperation = BlockOperation {
             print("Called here")
