@@ -137,6 +137,10 @@ final class ImageDownloaders {
                         if counter == urlCells.count - 1 {
                             /// Once all Processing Operations are added, add the dependent completion operation
                             pendingOperations.processingQueue.addOperation(completionOperation)
+
+                            /// Method 3 - Can also use ( Just for experimentation purpose ) 
+                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
+                            print("Done")
                         }
                     }
                     print("Completed \(urlCell.uid)")
