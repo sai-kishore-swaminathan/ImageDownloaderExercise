@@ -17,7 +17,6 @@ final class ImageDownloaders {
     public init() {}
     
     var output: ImageDownloaderOutput? = nil
-    let pendingOperations = PendingOperations()
     var operationsObserver: NSKeyValueObservation?
     // Replace the below cache with URLCellCache() for different implementation
     let urlCellCache = URLCellCacheWithLocks()
@@ -77,12 +76,24 @@ final class ImageDownloaders {
     // MARK: - Operations
     func downloadUsingOperations(urlCells:[URLCell], completion: @escaping(()->Void)) {
         urlCellCache.clearCache()
-        operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,
-                                                                        options: [.new]) { [unowned self] (queue, change) in
-            if change.newValue! == 0 {
-                operationsObserver = nil
-                completion()
-            }
+
+        /// Now Every Download Will create its own download and process operation queue
+        let pendingOperations = PendingOperations()
+
+        /// Method 1: - But still OperationCount is deprecated in iOS 13
+//        operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,
+//                                                                        options: [.new]) { [unowned self] (queue, change) in
+//            if change.newValue! == 0 {
+//                operationsObserver = nil
+//                completion()
+//            }
+//        }
+
+        /// Method 2: Completion using Dependency
+        var counter = 0
+        let completionOperation = BlockOperation {
+            print("Called here")
+            completion()
         }
 
         for i in 0...urlCells.count-1 {
@@ -92,56 +103,69 @@ final class ImageDownloaders {
                 continue
             }
 
+            /// Add Element to Cache
             urlCellCache.addElement(uid: urlCell.uid, urlCell: urlCell)
+
+            /// Check if the this operation is already in queue
             guard pendingOperations.downloadsInProgress[urlCell.uid] == nil else {
                 return
             }
 
+            /// Update State
             urlCellCache.updateState(uid: urlCell.uid, state: .downloading)
             output?.reloadDataAsynchronously()
 
-            // Downloading - NonOptional for simplicity
+            ///  Start Downloading using Operation()
             let downloadingOperation = ImageDownloaderOperationSubClass(urlCell: urlCellCache.getElement(uid: urlCell.uid)!)
-            downloadingOperation.completionBlock = {
-                    // Check Cancellation
-                    DispatchQueue.main.async { [weak self] in
-                        self?.pendingOperations.downloadsInProgress.removeValue(forKey: urlCell.uid)
-                        self?.output?.reloadDataAsynchronously()
-                        self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: downloadingOperation.urlCell)
-
-                        // Processing
-                        self?.startProcessingImagesFromOperaton(urlCell: self?.urlCellCache.getElement(uid: urlCell.uid))
-
-                    }
-                    print("Downloaded \(urlCell.uid)")
-                }
             pendingOperations.downloadsInProgress[urlCell.uid] = downloadingOperation
             pendingOperations.downloadQueue.addOperation(downloadingOperation)
 
+            downloadingOperation.completionBlock = {
+                    // TODO: - Check Cancellation
+                    DispatchQueue.main.async { [weak self] in
+                        pendingOperations.downloadsInProgress.removeValue(forKey: urlCell.uid)
+                        self?.output?.reloadDataAsynchronously()
+                        self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: downloadingOperation.urlCell)
+
+                        ///  Start Processing
+                        let processingOperation = self?.startProcessingImagesFromOperaton(urlCell: self?.urlCellCache.getElement(uid: urlCell.uid), pendingOperations: pendingOperations)
+                        if let processingOperation {
+                            completionOperation.addDependency(processingOperation)
+                        }
+
+                        counter += 1
+                        if counter == urlCells.count - 1 {
+                            /// Once all Processing Operations are added, add the dependent completion operation
+                            pendingOperations.processingQueue.addOperation(completionOperation)
+                        }
+                    }
+                    print("Completed \(urlCell.uid)")
+            }
         }
     }
 
-    private func startProcessingImagesFromOperaton(urlCell: URLCell?) {
+    private func startProcessingImagesFromOperaton(urlCell: URLCell?,
+                                                   pendingOperations: PendingOperations) -> Operation? {
 
         guard let urlCell = urlCell else {
-            return
+            return nil
         }
 
         guard pendingOperations.processingInProgress[urlCell.uid] == nil,
               urlCell.state != .failed else {
-            return
+            return nil
         }
 
         urlCellCache.updateState(uid: urlCell.uid, state: .processing)
         output?.reloadDataAsynchronously()
 
-        // Download Image here
+        /// Process Image here
         let processingOperation = ImageProcessor(urlCell: urlCell)
 
         processingOperation.completionBlock = {
             // Check Cancellation
             DispatchQueue.main.async {
-                self.pendingOperations.processingInProgress.removeValue(forKey: urlCell.uid)
+                pendingOperations.processingInProgress.removeValue(forKey: urlCell.uid)
                 self.urlCellCache.addElement(uid: urlCell.uid, urlCell: processingOperation.urlCell)
                 self.output?.reloadDataAsynchronously()
             }
@@ -150,6 +174,7 @@ final class ImageDownloaders {
 
         pendingOperations.processingInProgress[urlCell.uid] = processingOperation
         pendingOperations.processingQueue.addOperation(processingOperation)
+        return processingOperation
     }
 
     // MARK: - Async Await
@@ -180,6 +205,7 @@ final class ImageDownloaders {
         return true
     }
 
+    // MARK: - Async Await Helpers
     private func fetchDownloadAndProcess(cell: URLCell) async -> URLCell? {
         print("Cell \(cell.uid)")
         urlCellCache.addElement(uid: cell.uid, urlCell: cell)

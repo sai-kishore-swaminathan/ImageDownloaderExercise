@@ -17,8 +17,9 @@ import Foundation
 
 ---------------------------------------------------------------------------
  - Make Dictionary state thread safe with Locks  ( LOCK ) - 2 Hours ✅
+ - Fix Async Await - ✅
  - Explore Cancellation Options - GCD / Operations / Async Await - 2 Hours
- - How to Notify the user about completion when you use operation queue (operationCount) - 2 Hours
+ - How to Notify the user about completion when you use operation queue (operationCount) - 2 Hours ✅ ( Added Dependency )
 
 
  // Lower Priority

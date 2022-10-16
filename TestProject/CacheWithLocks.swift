@@ -92,7 +92,6 @@ class URLCellCacheWithLocks {
 //    }
 
 
-
 //    func clearCache() {
 //        dispatchQueueCell.async {
 //            self.cacheLock.lock()
