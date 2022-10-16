@@ -168,6 +168,18 @@ final class ImageDownloaders {
         }
     }
 
+    func downloadUsingAsyncAwaitWithoutClosure(urlCells:[URLCell]) async -> Bool {
+        urlCellCache.clearCache()
+        await withTaskGroup(of: URLCell?.self, body: { [self] group in
+            for cell in urlCells {
+                group.addTask {
+                    await self.fetchDownloadAndProcess(cell: cell)
+                }
+            }
+        })
+        return true
+    }
+
     private func fetchDownloadAndProcess(cell: URLCell) async -> URLCell? {
         print("Cell \(cell.uid)")
         urlCellCache.addElement(uid: cell.uid, urlCell: cell)
@@ -177,9 +189,10 @@ final class ImageDownloaders {
         if let image = image {
             urlCellCache.updateImage(uid: cell.uid, image: image)
             urlCellCache.updateState(uid: cell.uid, state: .downloaded)
-            self.output?.reloadDataAsynchronously()
             
             // Processing
+            urlCellCache.updateState(uid: cell.uid, state: .processing)
+            self.output?.reloadDataAsynchronously()
             let processedImage = try? await processImage(for: image)
             if let processedImage = processedImage {
                 urlCellCache.updateImage(uid: cell.uid, image: processedImage)
@@ -192,7 +205,6 @@ final class ImageDownloaders {
         self.output?.reloadDataAsynchronously()
         return urlCellCache.getElement(uid: cell.uid)
     }
-
 
     private func downloadImageAsyncAwait(from url: URL) async throws -> UIImage? {
         let imageTask = Task {

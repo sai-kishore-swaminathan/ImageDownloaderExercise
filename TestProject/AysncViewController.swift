@@ -22,12 +22,21 @@ class AysncViewController: UIViewController, UITableViewDelegate,
     }
     
     @IBAction func startButtonPressed(_ sender: Any) {
-        imageDownloader.downloadUsingAsyncAwait(urlCells: ImageUrls.getUrlCells()) {
-            DispatchQueue.main.async {
-                self.startButton.setTitle("Download Again", for: .normal)
-                let image = UIImage(systemName: "checkmark.seal.fill")
-                self.startButton.setImage(image, for: .normal)
-            }
+        // Method 1: Using Closures
+//        imageDownloader.downloadUsingAsyncAwait(urlCells: ImageUrls.getUrlCells()) {
+//            DispatchQueue.main.async {
+//                self.startButton.setTitle("Download Again", for: .normal)
+//                let image = UIImage(systemName: "checkmark.seal.fill")
+//                self.startButton.setImage(image, for: .normal)
+//            }
+//        }
+
+        // Method 2: with Asnc Await
+        Task {
+            let _ = await imageDownloader.downloadUsingAsyncAwaitWithoutClosure(urlCells: ImageUrls.getUrlCells())
+            self.startButton.setTitle("Download Again", for: .normal)
+            let image = UIImage(systemName: "checkmark.seal.fill")
+            self.startButton.setImage(image, for: .normal)
         }
     }
 
