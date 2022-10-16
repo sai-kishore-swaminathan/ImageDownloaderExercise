@@ -142,13 +142,14 @@ final class ImageDownloaders {
                         completionOperation.addDependency(processingOperation)
                     }
 
+                    /// This counter just adds the block  operation to the queue after the last processingOperation is created as a dependency
                     counter += 1
                     if counter == urlCells.count - 1 {
                         /// Once all Processing Operations are added, add the dependent completion operation
                         pendingOperations.processingQueue.addOperation(completionOperation)
 
-                        /// Method 3 - Can also use ( Just for experimentation purpose  Freezes the thread ( Synchronous )
-                        //                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
+                        /// Method 3 - Can also use this for completion( Just for experimentation purpose  Freezes the thread ( Synchronous )
+//                        pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
                         print("Done")
                     }
                 }
