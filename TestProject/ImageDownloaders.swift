@@ -127,29 +127,32 @@ final class ImageDownloaders {
             pendingOperations.downloadQueue.addOperation(downloadingOperation)
 
             downloadingOperation.completionBlock = {
-                    // TODO: - Check Cancellation
-                    DispatchQueue.main.async { [weak self] in
-                        pendingOperations.downloadsInProgress.removeValue(forKey: urlCell.uid)
-                        self?.output?.reloadDataAsynchronously()
-                        self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: downloadingOperation.urlCell)
+                // TODO: - Check Cancellation
+                if downloadingOperation.isCancelled {
+                    return
+                }
+                DispatchQueue.main.async { [weak self] in
+                    pendingOperations.downloadsInProgress.removeValue(forKey: urlCell.uid)
+                    self?.output?.reloadDataAsynchronously()
+                    self?.urlCellCache.addElement(uid: urlCell.uid, urlCell: downloadingOperation.urlCell)
 
-                        ///  Start Processing
-                        let processingOperation = self?.startProcessingImagesFromOperaton(urlCell: self?.urlCellCache.getElement(uid: urlCell.uid), pendingOperations: pendingOperations)
-                        if let processingOperation {
-                            completionOperation.addDependency(processingOperation)
-                        }
-
-                        counter += 1
-                        if counter == urlCells.count - 1 {
-                            /// Once all Processing Operations are added, add the dependent completion operation
-                            pendingOperations.processingQueue.addOperation(completionOperation)
-
-                            /// Method 3 - Can also use ( Just for experimentation purpose  Freezes the thread ( Synchronous )
-//                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
-                            print("Done")
-                        }
+                    ///  Start Processing
+                    let processingOperation = self?.startProcessingImagesFromOperaton(urlCell: self?.urlCellCache.getElement(uid: urlCell.uid), pendingOperations: pendingOperations)
+                    if let processingOperation {
+                        completionOperation.addDependency(processingOperation)
                     }
-                    print("Completed \(urlCell.uid)")
+
+                    counter += 1
+                    if counter == urlCells.count - 1 {
+                        /// Once all Processing Operations are added, add the dependent completion operation
+                        pendingOperations.processingQueue.addOperation(completionOperation)
+
+                        /// Method 3 - Can also use ( Just for experimentation purpose  Freezes the thread ( Synchronous )
+                        //                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
+                        print("Done")
+                    }
+                }
+                print("Completed \(urlCell.uid)")
             }
         }
     }
@@ -174,6 +177,10 @@ final class ImageDownloaders {
 
         processingOperation.completionBlock = {
             // Check Cancellation
+            if processingOperation.isCancelled {
+                return
+            }
+
             DispatchQueue.main.async {
                 pendingOperations.processingInProgress.removeValue(forKey: urlCell.uid)
                 self.urlCellCache.addElement(uid: urlCell.uid, urlCell: processingOperation.urlCell)
