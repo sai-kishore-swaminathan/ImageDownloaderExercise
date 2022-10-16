@@ -26,8 +26,8 @@ import Foundation
  - Make output as an array
  - Always think about multiple ViewControllers accessing the states
  - Check weakbox
- - Read about class initializer
- - Watch Async Await developer videos / Documentations
+ - Read about class initializer - ✅
+ - Watch Async Await developer videos / Documentations ✅
  */
 
 
