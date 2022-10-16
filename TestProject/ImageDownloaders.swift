@@ -81,19 +81,19 @@ final class ImageDownloaders {
         let pendingOperations = PendingOperations()
 
         /// Method 1: -  OperationCount is deprecated in iOS 13
-//        operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,
-//                                                                        options: [.new]) { [unowned self] (queue, change) in
-//            if change.newValue! == 0 {
-//                operationsObserver = nil
-//                completion()
-//            }
-//        }
+        operationsObserver = pendingOperations.processingQueue.observe(\.operationCount,
+                                                                        options: [.new]) { [unowned self] (queue, change) in
+            if change.newValue! == 0 {
+                operationsObserver = nil
+                completion()
+            }
+        }
 
         /// Method 2: Completion using Operation Dependency
         var counter = 0
         let completionOperation = BlockOperation {
             print("Called here")
-            completion()
+//            completion()
         }
 
         for i in 0...urlCells.count-1 {
@@ -138,8 +138,8 @@ final class ImageDownloaders {
                             /// Once all Processing Operations are added, add the dependent completion operation
                             pendingOperations.processingQueue.addOperation(completionOperation)
 
-                            /// Method 3 - Can also use ( Just for experimentation purpose ) 
-                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
+                            /// Method 3 - Can also use ( Just for experimentation purpose  Freezes the thread ( Synchronous )
+//                            pendingOperations.processingQueue.waitUntilAllOperationsAreFinished()
                             print("Done")
                         }
                     }
